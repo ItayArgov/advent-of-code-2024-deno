@@ -1,11 +1,10 @@
-import { sumOf } from "@std/collections/sum-of";
+import { sumOf } from "@std/collections";
 import { getLists } from "./part1.ts";
 import { readInput } from "./input.ts";
 
 function getCounter(list: number[]): Map<number, number> {
   return list.reduce(
-    (countMap, currNum) =>
-      countMap.set(currNum, (countMap.get(currNum) ?? 0) + 1),
+    (counter, currNum) => counter.set(currNum, (counter.get(currNum) ?? 0) + 1),
     new Map<number, number>(),
   );
 }

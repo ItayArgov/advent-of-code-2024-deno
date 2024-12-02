@@ -28,13 +28,6 @@
       "jsr:@std/assert@1",
       "jsr:@std/cli@^1.0.7",
       "jsr:@std/collections@^1.0.9"
-    ],
-    "members": {
-      "day1": {
-        "dependencies": [
-          "jsr:@std/assert@1"
-        ]
-      }
-    }
+    ]
   }
 }
