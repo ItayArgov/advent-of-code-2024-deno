@@ -17,8 +17,13 @@ function checkIfX(grid: string[][], i: number, j: number): boolean {
 
 function part2(input: string) {
   const lines = input.split("\n").map((line) => line.split(""));
-  const res = lines.map((line, i) => line.map((_, j) => checkIfX(lines, i, j)));
-  console.log(sumOf(res.flat(), (x) => (x ? 1 : 0)));
+  const xLocationArray = lines.map((line, i) =>
+    line.map((_, j) => checkIfX(lines, i, j)),
+  );
+  console.log(
+    "Part 2:",
+    sumOf(xLocationArray.flat(), (x) => (x ? 1 : 0)),
+  );
 }
 
 if (import.meta.main) {
