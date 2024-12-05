@@ -32,11 +32,13 @@ export function getUpdateAndRulesMap(input: string) {
 
   const rulesMap = new Map<number, Set<number>>();
   const groupedRules = Object.groupBy(order, ([a, _]) => a);
+
   for (const rule in groupedRules) {
     const newSet = new Set<number>();
     groupedRules[rule]?.values().forEach(([_, b]) => newSet.add(b));
     rulesMap.set(parseInt(rule), newSet);
   }
+
   return { updates, rulesMap };
 }
 
