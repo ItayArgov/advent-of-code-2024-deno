@@ -28,15 +28,16 @@ export function getUpdateAndRulesMap(input: string) {
 
   const updates = updatesLines
     .split("\n")
-    .map((line) => line.split(",").map((x) => parseInt(x)));
+    .map((line) => line.split(",").map(Number));
 
   const rulesMap = new Map<number, Set<number>>();
-  const groupedRules = Object.groupBy(order, ([a, _]) => a);
 
-  for (const rule in groupedRules) {
-    const newSet = new Set<number>();
-    groupedRules[rule]?.values().forEach(([_, b]) => newSet.add(b));
-    rulesMap.set(parseInt(rule), newSet);
+  for (const [a, b] of order) {
+    if (!rulesMap.has(a)) {
+      rulesMap.set(a, new Set());
+    }
+
+    rulesMap.get(a)?.add(b);
   }
 
   return { updates, rulesMap };
@@ -45,10 +46,9 @@ export function getUpdateAndRulesMap(input: string) {
 function part1(input: string) {
   const { updates, rulesMap } = getUpdateAndRulesMap(input);
 
-  const res = sumOf(
-    updates.filter((update) => isValidRule(rulesMap, update)),
-    getMiddle,
-  );
+  const isValidRuleForRulesMap = isValidRule.bind(null, rulesMap);
+
+  const res = sumOf(updates.filter(isValidRuleForRulesMap), getMiddle);
 
   console.log(res);
 }

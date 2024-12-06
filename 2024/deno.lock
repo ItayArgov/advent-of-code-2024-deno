@@ -2,6 +2,7 @@
   "version": "4",
   "specifiers": {
     "jsr:@std/assert@1": "1.0.8",
+    "jsr:@std/bytes@^1.0.4": "1.0.4",
     "jsr:@std/cli@^1.0.7": "1.0.7",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/internal@^1.0.5": "1.0.5"
@@ -12,6 +13,9 @@
       "dependencies": [
         "jsr:@std/internal"
       ]
+    },
+    "@std/bytes@1.0.4": {
+      "integrity": "11a0debe522707c95c7b7ef89b478c13fb1583a7cfb9a85674cd2cc2e3a28abc"
     },
     "@std/cli@1.0.7": {
       "integrity": "98359df9df586a69015ba570305183b0cb9e7d53c05ea2016ef9a3e77e82c7cd"
@@ -28,6 +32,13 @@
       "jsr:@std/assert@1",
       "jsr:@std/cli@^1.0.7",
       "jsr:@std/collections@^1.0.9"
-    ]
+    ],
+    "members": {
+      "day6": {
+        "dependencies": [
+          "jsr:@std/bytes@^1.0.4"
+        ]
+      }
+    }
   }
 }
