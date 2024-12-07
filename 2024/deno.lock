@@ -34,7 +34,7 @@
       "jsr:@std/collections@^1.0.9"
     ],
     "members": {
-      "day6": {
+      "day06": {
         "dependencies": [
           "jsr:@std/bytes@^1.0.4"
         ]

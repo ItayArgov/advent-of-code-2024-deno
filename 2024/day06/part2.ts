@@ -1,27 +1,6 @@
-import { readInput, readInputBytes } from "./input.ts";
-import { Buffer } from "node:buffer";
-import { part1 } from "./part1.ts";
+import { readInput } from "./input.ts";
+import { getStartPos, part1 } from "./part1.ts";
 import { chunk, sumOf } from "@std/collections";
-import "@std/bytes";
-
-// up [-1 ,0]
-// right [0, 1]
-// down [1, 0]
-// left [0, -1]
-
-function getStartPos(grid: string[][]) {
-  for (let x = 0; x < grid.length; x++) {
-    for (let y = 0; y < grid[x].length; y++) {
-      if (grid[x][y] === "^") {
-        return [x, y];
-      }
-    }
-  }
-}
-
-if (import.meta.main) {
-  await part2();
-}
 
 async function part2() {
   const grid = readInput()
@@ -65,6 +44,10 @@ function createWorker(
 
     worker.postMessage({ grid, chunk, startPos });
   });
+}
+
+if (import.meta.main) {
+  await part2();
 }
 
 Deno.bench("part2", async () => await part2());

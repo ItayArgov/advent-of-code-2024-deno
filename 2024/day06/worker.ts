@@ -37,9 +37,9 @@ function findObstaclesForChunk(
 function simulateGuard(grid: string[][], startPos: [number, number]) {
   let [x, y] = startPos;
   let dir = [-1, 0] as [number, number];
-  const visited = new Set<string>();
-  visited.add([x, y, dir[0], dir[1]].toString());
-  while (true) {
+  let steps = 0;
+  const upperBound = grid.length * grid[0].length * 4;
+  while (steps < upperBound) {
     const [dx, dy] = dir;
     if (isOutOfBounds(grid, x + dx, y + dy)) {
       return false;
@@ -51,11 +51,8 @@ function simulateGuard(grid: string[][], startPos: [number, number]) {
 
     x += dir[0];
     y += dir[1];
-
-    if (visited.has([x, y, dir[0], dir[1]].toString())) {
-      return true;
-    }
-
-    visited.add([x, y, dir[0], dir[1]].toString());
+    steps++;
   }
+
+  return true;
 }
