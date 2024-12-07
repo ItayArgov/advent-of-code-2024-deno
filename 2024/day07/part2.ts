@@ -17,7 +17,7 @@ function part2(input: string) {
     isValidEquation(eq, [concat, mult, plus]),
   );
 
-  console.log(sumOf(validEquations, (eq) => eq[0]));
+  console.log(sumOf(validEquations, (eq) => eq.target));
 }
 
 if (import.meta.main) {

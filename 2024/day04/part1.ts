@@ -41,6 +41,7 @@ function isXmasForDir(
   ) {
     return;
   }
+
   currString.push(grid[i + di][j + dj]);
   isXmasForDir(grid, currString, i + di, j + dj, dir);
 }
