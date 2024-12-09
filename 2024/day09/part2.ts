@@ -1,5 +1,6 @@
 import { readInput } from "./input.ts";
 import { calculateChecksum, uncompress, type Disk } from "./part1.ts";
+import { BinaryHeap, ascend } from "@std/data-structures";
 
 function getCurrentBlockSize(disk: Disk, r: number) {
   let size = 0;
@@ -12,8 +13,34 @@ function getCurrentBlockSize(disk: Disk, r: number) {
   return size;
 }
 
+function initFreeSpaces(disk: Disk): BinaryHeap<number>[] {
+  const freeSpaces = Array.from(
+    { length: 10 },
+    () => new BinaryHeap<number>(ascend),
+  );
+
+  let idx = 0;
+  while (idx < disk.length) {
+    if (disk[idx] !== null) {
+      idx++;
+      continue;
+    }
+
+    let size = 0;
+    while (disk[idx] === null) {
+      size++;
+      idx++;
+    }
+
+    freeSpaces[size].push(idx - size);
+  }
+
+  return freeSpaces;
+}
+
 function moveBlocksToStart(disk: Disk) {
   let r = disk.length - 1;
+  const freeSpaces = initFreeSpaces(disk);
   while (r > 0) {
     if (disk[r] === null) {
       r--;
@@ -22,7 +49,11 @@ function moveBlocksToStart(disk: Disk) {
 
     const currentBlockSize = getCurrentBlockSize(disk, r);
 
-    const indexOfFreeSpace = findFreeSpaceOfSize(disk, currentBlockSize, r);
+    const indexOfFreeSpace = findFreeSpaceOfSize(
+      currentBlockSize,
+      r,
+      freeSpaces,
+    );
 
     if (!indexOfFreeSpace) {
       const currNum = disk[r];
@@ -52,13 +83,32 @@ if (import.meta.main) {
   part2(readInput().trimEnd());
 }
 
-function findFreeSpaceOfSize(disk: Disk, size: number, r: number) {
-  const bound = Math.min(r - size - 1, disk.length - size - 1);
-  for (let i = 0; i < bound; i++) {
-    if (disk.slice(i, i + size).every((val) => val === null)) {
-      return i;
+function findFreeSpaceOfSize(
+  size: number,
+  r: number,
+  freeSpaces: BinaryHeap<number>[],
+) {
+  const candidateIdxs: { size: number; idx: number }[] = [];
+  for (let i = size; i < 10; i++) {
+    const earliestFreeSpace = freeSpaces[i].peek();
+    if (earliestFreeSpace && earliestFreeSpace < r) {
+      candidateIdxs.push({ size: i, idx: earliestFreeSpace });
     }
   }
 
-  return null;
+  if (!candidateIdxs.length) {
+    return null;
+  }
+
+  const { idx, size: currSize } = candidateIdxs.toSorted(
+    (a, b) => a.idx - b.idx,
+  )[0];
+
+  freeSpaces[currSize].pop();
+
+  if (currSize - size > 0) {
+    freeSpaces[currSize - size].push(idx + size);
+  }
+
+  return idx;
 }
