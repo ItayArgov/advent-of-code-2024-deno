@@ -8,7 +8,7 @@ export const dirs = [
 ];
 
 export const getGrid = (input: string) =>
-  input.split("\n").map((line) => [...line].map(Number));
+  input.split("\n").map((line) => line.split("").map(Number));
 
 function dfs(grid: number[][], r: number, c: number, trailHeads: Set<string>) {
   if (grid[r][c] === 9) {

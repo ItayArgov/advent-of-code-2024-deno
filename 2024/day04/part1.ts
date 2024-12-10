@@ -32,18 +32,19 @@ function isXmasForDir(
     return;
   }
 
-  const [di, dj] = dir;
+  const [ni, nj] = [i + dir[0], j + dir[1]];
   if (
-    i + di < 0 ||
-    j + dj < 0 ||
-    i + di >= grid.length ||
-    j + dj >= grid[i].length
+    ni < 0 ||
+    nj < 0 ||
+    ni >= grid.length ||
+    nj >= grid[0].length ||
+    currString.includes(grid[ni][nj])
   ) {
     return;
   }
 
-  currString.push(grid[i + di][j + dj]);
-  isXmasForDir(grid, currString, i + di, j + dj, dir);
+  currString.push(grid[ni][nj]);
+  isXmasForDir(grid, currString, ni, nj, dir);
 }
 
 function part1(input: string) {
