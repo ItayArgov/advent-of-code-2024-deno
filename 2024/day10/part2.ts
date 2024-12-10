@@ -2,10 +2,6 @@ import { readInput } from "./input.ts";
 import { dirs, getGrid } from "./part1.ts";
 
 function dfs(grid: number[][], r: number, c: number): number {
-  if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length) {
-    return 0;
-  }
-
   if (grid[r][c] === 0) {
     return 1;
   }
@@ -48,3 +44,5 @@ function part2(input: string) {
 if (import.meta.main) {
   part2(readInput().trimEnd());
 }
+
+Deno.bench("part2", () => part2(readInput().trimEnd()));
