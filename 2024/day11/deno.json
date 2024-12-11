@@ -4,5 +4,8 @@
     "dev2": "deno run --watch --allow-read part2.ts --test",
     "run1": "deno run --allow-read part1.ts",
     "run2": "deno run --allow-read part2.ts"
+  },
+  "imports": {
+    "@std/cache": "jsr:@std/cache@^0.1.3"
   }
 }

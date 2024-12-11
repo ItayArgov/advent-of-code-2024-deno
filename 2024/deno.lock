@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@std/assert@1": "1.0.8",
     "jsr:@std/bytes@^1.0.4": "1.0.4",
+    "jsr:@std/cache@~0.1.3": "0.1.3",
     "jsr:@std/cli@^1.0.7": "1.0.7",
     "jsr:@std/collections@^1.0.9": "1.0.9",
     "jsr:@std/data-structures@^1.0.4": "1.0.4",
@@ -17,6 +18,9 @@
     },
     "@std/bytes@1.0.4": {
       "integrity": "11a0debe522707c95c7b7ef89b478c13fb1583a7cfb9a85674cd2cc2e3a28abc"
+    },
+    "@std/cache@0.1.3": {
+      "integrity": "8d3ab61d994d0915295048999f34a8ce2280f0e4d1f4cccb08c9e3d297c0c6ec"
     },
     "@std/cli@1.0.7": {
       "integrity": "98359df9df586a69015ba570305183b0cb9e7d53c05ea2016ef9a3e77e82c7cd"
@@ -46,6 +50,11 @@
       "day09": {
         "dependencies": [
           "jsr:@std/data-structures@^1.0.4"
+        ]
+      },
+      "day11": {
+        "dependencies": [
+          "jsr:@std/cache@~0.1.3"
         ]
       }
     }
