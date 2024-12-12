@@ -1,11 +1,11 @@
 import { readInput } from "./input.ts";
 import { dropWhile } from "@std/collections/unstable-drop-while";
 
-export type Stone = string;
+type Stone = string;
 
 const trimZeroes = (s: string) => dropWhile(s, (c) => c === "0").join("");
 
-export function blinkStone(stone: Stone): Stone[] {
+function blinkStone(stone: Stone): Stone[] {
   if (stone === "0") return ["1"];
   if (stone.length % 2 === 0) {
     const mid = Math.floor(stone.length / 2);
