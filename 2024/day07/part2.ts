@@ -23,7 +23,3 @@ function part2(input: string) {
 if (import.meta.main) {
   part2(readInput().trimEnd());
 }
-
-Deno.bench("part2", () => {
-  part2(readInput().trimEnd());
-});

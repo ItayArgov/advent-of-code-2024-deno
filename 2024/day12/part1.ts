@@ -61,7 +61,3 @@ function part1(input: string) {
 if (import.meta.main) {
   part1(readInput().trimEnd());
 }
-
-Deno.bench("part1", () => {
-  part1(readInput().trimEnd());
-});

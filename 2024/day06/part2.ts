@@ -49,5 +49,3 @@ function createWorker(
 if (import.meta.main) {
   await part2();
 }
-
-Deno.bench("part2", async () => await part2());
