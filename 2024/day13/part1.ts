@@ -28,7 +28,6 @@ export const reduceClawMachines = (clawsTokens: ([number, number] | null)[]) =>
 function simulateClawMachine(
   clawMachine: ClawMachine,
 ): [number, number] | null {
-  let totalPresses = 0;
   const [ax, ay] = clawMachine.A;
   const [bx, by] = clawMachine.B;
   const [px, py] = clawMachine.P;
@@ -38,8 +37,6 @@ function simulateClawMachine(
       if (i * ax + j * bx === px && i * ay + j * by === py) return [i, j];
       if (j * ax + i * bx === px && j * ay + i * by === py) return [j, i];
     }
-
-    totalPresses++;
   }
 
   return null;
