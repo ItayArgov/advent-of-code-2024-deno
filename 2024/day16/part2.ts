@@ -1,29 +1,12 @@
 import { readInput } from "./input.ts";
 import {
-  DIRS,
   djisktra,
   getEndLocation,
   getStartLocation,
   part1,
-  printDistGrid,
   toKey,
   type Grid,
 } from "./part1.ts";
-
-// A function that prints the grid, with "O" for cells that pass the weird DFS, otherwise the are the same as the input grid
-function printWeirdDfs(grid: Grid, distGrid: number[][], maxDist: number) {
-  for (let r = 0; r < grid.length; r++) {
-    let row = "";
-    for (let c = 0; c < grid[r].length; c++) {
-      if (distGrid[r][c] === maxDist) {
-        row += "O";
-      } else {
-        row += grid[r][c];
-      }
-    }
-    console.log(row);
-  }
-}
 
 function createMatrixSizeOfWithMaxSafeInt(grid: Grid) {
   return Array.from({ length: grid.length }, () =>
@@ -35,17 +18,23 @@ function calculateDistFromAllToEnd(
   grid: Grid,
   seen: Map<string, [number, number]>,
 ) {
-  const res: number[][] = createMatrixSizeOfWithMaxSafeInt(grid);
   const [er, ec] = getEndLocation(grid);
-  console.log(seen.size);
+  const [sr, sc] = getStartLocation(grid);
+  const endOrientation = seen.get(toKey(er, ec))!;
+  const [nr, nc] = [-endOrientation[0], -endOrientation[1]];
+  grid[er][ec] = "S";
+  grid[sr][sc] = "E";
+  const { res: distGridFromEnd, seen: seenReversed } = djisktra(
+    grid,
+    er,
+    ec,
+    nr,
+    nc,
+  );
+  grid[er][ec] = "E";
+  grid[sr][sc] = "S";
 
-  for (const [loc, [dr, dc]] of seen) {
-    const [r, c] = loc.split(",").map(Number);
-    const { res: distGrid } = djisktra(grid, r, c, dr, dc);
-    res[r][c] = distGrid[er][ec];
-  }
-
-  return res;
+  return { distGridFromEnd, seenReversed };
 }
 
 function calculateLocations(
@@ -53,18 +42,29 @@ function calculateLocations(
   distGridFromStart: number[][],
   distGridToEnd: number[][],
   minDist: number,
+  seen: Map<string, [number, number]>,
+  seenReverse: Map<string, [number, number]>,
 ) {
   const distGrid: number[][] = createMatrixSizeOfWithMaxSafeInt(grid);
   let res = 0;
 
   for (let r = 0; r < grid.length; r++) {
     for (let c = 0; c < grid[r].length; c++) {
-      if (grid[r][c] === ".") {
-        distGrid[r][c] = distGridFromStart[r][c] + distGridToEnd[r][c];
-        if (distGrid[r][c] === minDist) {
-          res++;
-        }
+      if (
+        distGridFromStart[r][c] === Number.MAX_SAFE_INTEGER ||
+        distGridToEnd[r][c] === Number.MAX_SAFE_INTEGER
+      ) {
+        continue;
       }
+
+      const dir = seen.get(toKey(r, c))!;
+      const dirReverse = seenReverse.get(toKey(r, c))!;
+
+      const edgeCost =
+        dir[0] === -dirReverse[0] && dir[1] === -dirReverse[1] ? 0 : 1000;
+
+      if (edgeCost + distGridFromStart[r][c] + distGridToEnd[r][c] === minDist)
+        res++;
     }
   }
 
@@ -72,22 +72,26 @@ function calculateLocations(
 }
 
 function part2({ grid, res, seen, endScore }: ReturnType<typeof part1>) {
-  const visitedAndOrientation = new Map<string, [number, number]>();
-  const [sr, sc] = getStartLocation(grid);
-  const endDists = calculateDistFromAllToEnd(grid, seen);
+  const { distGridFromEnd, seenReversed } = calculateDistFromAllToEnd(
+    grid,
+    seen,
+  );
+  const locationCount = calculateLocations(
+    grid,
+    res,
+    distGridFromEnd,
+    endScore,
+    seen,
+    seenReversed,
+  );
 
-  // console.log(
-  //   visitedAndOrientation.get("11,2"),
-  //   endDists[11][2],
-  //   djisktra(grid, 11, 2, 0, 1),
-  // );
-  const ress = calculateLocations(grid, res, endDists, endScore);
-  console.log(ress + 2);
-  // console.log(endScore);
-  // printWeirdDfs(grid, res, endScore);
-  // weirdDfs(grid, new Set(), res, endScore, 2, grid[0].length - 2);
+  console.log(locationCount);
 }
 
 if (import.meta.main) {
   part2(part1(readInput().trimEnd()));
 }
+
+Deno.bench("part2", () => {
+  part2(part1(readInput().trimEnd()));
+});

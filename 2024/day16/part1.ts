@@ -1,5 +1,5 @@
 import { readInput } from "./input.ts";
-import { ascend, BinaryHeap } from "@std/data-structures";
+import { BinaryHeap } from "@std/data-structures";
 
 type Letters = "." | "E" | "#" | "S";
 export type Grid = Letters[][];
@@ -55,7 +55,7 @@ const getEndScore = (grid: Grid, distGrid: number[][]) => {
   throw new Error("No end location found");
 };
 
-function getNeighborsWithCost(
+export function getNeighborsWithCost(
   grid: Grid,
   r: number,
   c: number,
@@ -68,10 +68,6 @@ function getNeighborsWithCost(
 
     if (grid[nr][nc] !== "." && grid[nr][nc] !== "E") {
       return null;
-    }
-
-    if (dr === -currDr && dc === -currDc) {
-      return [[nr, nc], 2000];
     }
 
     return dr === currDr && dc === currDc ? [[nr, nc], 1] : [[nr, nc], 1001];
@@ -129,6 +125,7 @@ export function printDistGrid(grid: number[][]) {
     }
     console.log(line);
   }
+  console.log("--------------------------");
 }
 
 export function part1(input: string): {
@@ -145,5 +142,5 @@ export function part1(input: string): {
 }
 
 if (import.meta.main) {
-  part1(readInput().trimEnd());
+  console.log(part1(readInput().trimEnd()));
 }
