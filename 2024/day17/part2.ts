@@ -1,55 +1,48 @@
+import { CPU } from "./CPU.ts";
 import { readInput } from "./input.ts";
 import { assertEquals } from "@std/assert";
-import { calculateOp, CPU, parseInput } from "./part1.ts";
 
-function listsAreEqual(a: bigint[], b: bigint[]) {
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) {
-      return false;
+function digitToOut(
+  cpu: CPU,
+  target: bigint[],
+  curr: bigint,
+  index: number,
+): bigint | undefined {
+  for (let i = 0n; i < 8n; i++) {
+    const candidate = curr | i;
+    cpu.runWithA(candidate);
+
+    if (cpu.outs[0] === target[index]) {
+      if (index === 0) return candidate;
+
+      const res = digitToOut(cpu, target, candidate << 3n, index - 1);
+      if (res) return res;
     }
   }
 
-  return true;
+  return undefined;
 }
 
-function digitToOut(target: bigint[]): bigint {
-  if (!target.length) {
-    return 0n;
-  }
+function part2() {
+  const cpu = new CPU(readInput().trimEnd());
 
-  let curr = 8n * digitToOut(target.slice(1));
+  const res = digitToOut(
+    cpu,
+    cpu.program.map((a) => BigInt(a)),
+    0n,
+    cpu.program.length - 1,
+  );
 
-  while (true) {
-    clearCPU(curr);
-    while (calculateOp());
-
-    if (listsAreEqual(CPU.outs, target)) {
-      return curr;
-    }
-
-    curr++;
-  }
-}
-
-const clearCPU = (a?: bigint) => {
-  CPU.outs = [];
-  CPU.PC = 0;
-  CPU.A = a ?? 0n;
-  CPU.B = 0n;
-  CPU.C = 0n;
-};
-
-if (import.meta.main) {
-  parseInput(readInput().trimEnd());
-
-  const res = digitToOut(CPU.program.map((a) => BigInt(a)));
-
-  clearCPU(res);
-  while (calculateOp());
+  cpu.runWithA(res!);
   assertEquals(
-    CPU.program,
-    CPU.outs.map((o) => Number(o)),
+    cpu.program,
+    cpu.outs.map((o) => Number(o)),
   );
   console.log(res);
-  console.log(CPU.outs);
 }
+
+if (import.meta.main) {
+  part2();
+}
+
+Deno.bench("part2", part2);
