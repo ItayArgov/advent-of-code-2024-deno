@@ -2,8 +2,8 @@
   "tasks": {
     "dev1": "deno run --watch --allow-read part1.ts --test",
     "dev2": "deno run --watch --allow-read part2.ts --test",
-    "run1": "deno run --watch --allow-read part1.ts",
-    "run2": "deno run --watch --allow-read part2.ts"
+    "run1": "deno run --allow-read part1.ts",
+    "run2": "deno run --allow-read part2.ts"
   },
   "imports": {
     "@std/bytes": "jsr:@std/bytes@^1.0.4"
