@@ -1,8 +1,9 @@
 import { parseArgs } from "@std/cli";
 
+export const isTest = () => parseArgs(Deno.args, { boolean: ["test"] }).test;
+
 export function readInput(): string {
-  const isTest = parseArgs(Deno.args, { boolean: ["test"] }).test;
-  return isTest
+  return isTest()
     ? Deno.readTextFileSync("testInput")
     : Deno.readTextFileSync("input");
 }
